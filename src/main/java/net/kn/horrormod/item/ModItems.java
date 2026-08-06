@@ -26,4 +26,14 @@ public class ModItems {
                     .rarity(Rarity.RARE)
                     .fireResistant()
             ));
+
+    public static final RegistryObject<Item> CELT_CREST =
+            ITEMS.register("celt_crest", ()-> new Item(new Item.Properties()
+                    .stacksTo(1)
+                    .rarity(Rarity.UNCOMMON)
+                    .fireResistant()
+                    .setNoRepair()
+            ));
+
+
 }
