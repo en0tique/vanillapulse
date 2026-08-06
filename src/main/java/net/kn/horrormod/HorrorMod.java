@@ -1,6 +1,7 @@
 package net.kn.horrormod;
 
 import com.mojang.logging.LogUtils;
+import net.kn.horrormod.block.ModBlocks;
 import net.kn.horrormod.item.ModItems;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -27,7 +28,7 @@ public class HorrorMod
         //реєстрація папки (class) ITEM, до основного файлу. modEventBus - підгружає ці предмети під час завантаження лаунчера
         ModItems.ITEMS.register(modEventBus);
 
-
+        ModBlocks.BLOCKS.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
