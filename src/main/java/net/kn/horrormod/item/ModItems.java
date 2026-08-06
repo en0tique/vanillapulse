@@ -1,0 +1,29 @@
+package net.kn.horrormod.item;
+
+
+import net.kn.horrormod.HorrorMod;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+
+public class ModItems {
+    //Відкладенна реєстрація для всіх предметів
+    public static final DeferredRegister<Item> ITEMS =
+            DeferredRegister.create(ForgeRegistries.ITEMS, HorrorMod.MOD_ID);
+    //Реєстрація самого предмета. Це сталий вираз.
+    public static final RegistryObject<Item> STEEL_INGOT =
+            ITEMS.register("steel_ingot", ()-> new Item(new Item.Properties()
+                    .stacksTo(128)
+                    .rarity(Rarity.EPIC)
+            ));
+
+
+    public static final RegistryObject<Item> SHIT_INGOT =
+            ITEMS.register("shit_ingot", ()-> new Item(new Item.Properties()
+                    .stacksTo(4)
+                    .rarity(Rarity.RARE)
+                    .fireResistant()
+            ));
+}
