@@ -28,7 +28,7 @@ public class HideFromPlayerGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        Player player = mob.level().getNearestPlayer(mob, 16.0);
+        Player player = mob.level().getNearestPlayer(mob, 32.0);
         if (player == null) return false;
 
 
