@@ -16,7 +16,7 @@ public class ModEntity {
             ENTITY_TYPES.register("stalker", ()->
                     EntityType.Builder.of(StalkerEntity::new, MobCategory.MONSTER)
                             .sized(0.6f, 1.95f)
-                            .clientTrackingRange(10)
+                            .clientTrackingRange(20)
                             .build("stalker")
             );
 }

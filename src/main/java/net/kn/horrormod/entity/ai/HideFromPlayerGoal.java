@@ -20,6 +20,34 @@ public class HideFromPlayerGoal extends Goal {
 
     private BlockPos hideSpot;
 
+    private int hideCount = 0;
+
+    private boolean tryDisappear() {
+        hideCount++;
+
+        double chance;
+
+        switch (hideCount) {
+            case 1 -> chance = 0.10;
+            case 2 -> chance = 0.30;
+            case 3 -> chance = 0.60;
+            case 4 -> chance = 0.85;
+            default -> chance = 1.0;
+        }
+
+        if (mob.getRandom().nextDouble() < chance) {
+            mob.discard();
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean isHiddenFromPlayer(Player player) {
+        return isFullyConcealed(mob.blockPosition(), player);
+    }
+
+
     public HideFromPlayerGoal(PathfinderMob mob, double speed) {
         this.mob = mob;
         this.speed = speed;
@@ -28,7 +56,7 @@ public class HideFromPlayerGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        Player player = mob.level().getNearestPlayer(mob, 16.0);
+        Player player = mob.level().getNearestPlayer(mob, 32.0);
         if (player == null) return false;
 
 
@@ -94,10 +122,12 @@ public class HideFromPlayerGoal extends Goal {
     }
 
     @Override
-    public void start(){
+    public void start() {
         Player player = mob.level().getNearestPlayer(mob, 16.0);
         if (player == null) return;
+
         hideSpot = findHideSpot(player);
+
         if (hideSpot != null) {
             mob.getNavigation().moveTo(
                     hideSpot.getX() + 0.5,
@@ -107,9 +137,42 @@ public class HideFromPlayerGoal extends Goal {
             );
         }
     }
+
+    @Override
+    public void tick() {
+        if (hideSpot == null) {
+            return;
+        }
+
+        // Ще не добіг до укриття
+        if (!mob.getNavigation().isDone()) {
+            return;
+        }
+
+        Player player = mob.level().getNearestPlayer(mob, 32.0);
+
+        if (player == null) {
+            hideSpot = null;
+            return;
+        }
+
+        // Моб вже в укритті, але гравець його все ще бачить
+        if (!isHiddenFromPlayer(player)) {
+            hideSpot = null;
+            return;
+        }
+
+        // Моб реально схований -> перевіряємо шанс
+        tryDisappear();
+
+        // Завершуємо це ховання,
+        // щоб наступного разу canUse() запустив його знову
+        hideSpot = null;
+    }
+
     @Override
     public boolean canContinueToUse() {
-        return !mob.getNavigation().isDone();
+        return hideSpot != null;
     }
 
 }

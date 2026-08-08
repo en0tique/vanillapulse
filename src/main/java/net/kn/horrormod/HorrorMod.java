@@ -4,8 +4,9 @@ import com.mojang.logging.LogUtils;
 import net.kn.horrormod.block.ModBlocks;
 import net.kn.horrormod.entity.ModEntity;
 import net.kn.horrormod.entity.StalkerEntity;
+import net.kn.horrormod.entity.client.StalkerModel;
+import net.kn.horrormod.entity.client.StalkerRenderer;
 import net.kn.horrormod.item.ModItems;
-import net.minecraft.client.renderer.entity.ZombieRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -56,8 +57,13 @@ public class HorrorMod
     public static class ClientModEvents
     {
         @SubscribeEvent
-        public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-            event.registerEntityRenderer(ModEntity.STALKER.get(), ZombieRenderer::new);
+        public static void onRegisterEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+            event.registerEntityRenderer(ModEntity.STALKER.get(), StalkerRenderer::new);
+        }
+
+        @SubscribeEvent
+        public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+            event.registerLayerDefinition(StalkerModel.LAYER_LOCATION, StalkerModel::createBodyLayer);
         }
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
