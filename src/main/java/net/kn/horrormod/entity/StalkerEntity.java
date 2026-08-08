@@ -3,14 +3,12 @@ package net.kn.horrormod.entity;
 import net.kn.horrormod.entity.ai.HideFromPlayerGoal;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 
 public class StalkerEntity  extends Monster {
@@ -33,21 +31,12 @@ public class StalkerEntity  extends Monster {
     @Override
     protected void registerGoals(){
         this.goalSelector.addGoal(1, new HideFromPlayerGoal(this, 0.8));
+        this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 32.0f, 1.0f));
     }
     @Override
     public void tick() {
         super.tick();
         setupWalkAnimationState();
-        Player player = level().getNearestPlayer(this, 16.0);
-        if (player != null) {
-            this.getLookControl().setLookAt(
-                    player.getX(),
-                    player.getEyeY(),
-                    player.getZ(),
-                    30.0f,
-                    30.0f
-            );
-        }
     }
 
     private void setupWalkAnimationState() {
@@ -61,5 +50,9 @@ public class StalkerEntity  extends Monster {
         } else {
             this.walkAnimationState.stop();
         }
+    }
+    @Override
+    public int getMaxHeadYRot() {
+        return 180;
     }
 }
