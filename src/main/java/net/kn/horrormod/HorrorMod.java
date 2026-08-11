@@ -2,8 +2,10 @@ package net.kn.horrormod;
 
 import com.mojang.logging.LogUtils;
 import net.kn.horrormod.block.ModBlocks;
+import net.kn.horrormod.entity.DeadHorseEntity;
 import net.kn.horrormod.entity.ModEntity;
 import net.kn.horrormod.entity.StalkerEntity;
+import net.kn.horrormod.entity.client.DeadHorseRenderer;
 import net.kn.horrormod.entity.client.StalkerModel;
 import net.kn.horrormod.entity.client.StalkerRenderer;
 import net.kn.horrormod.item.ModItems;
@@ -44,6 +46,7 @@ public class HorrorMod
     }
     private void registerAttributes(final EntityAttributeCreationEvent event) {
         event.put(ModEntity.STALKER.get(), StalkerEntity.createAttributes().build());
+        event.put(ModEntity.DEAD_HORSE.get(), DeadHorseEntity.createAttributes().build() );
     }
     private void commonSetup(final FMLCommonSetupEvent event)
     {
@@ -59,6 +62,7 @@ public class HorrorMod
         @SubscribeEvent
         public static void onRegisterEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(ModEntity.STALKER.get(), StalkerRenderer::new);
+            event.registerEntityRenderer( ModEntity.DEAD_HORSE.get(), DeadHorseRenderer::new );
         }
 
         @SubscribeEvent

@@ -19,4 +19,12 @@ public class ModEntity {
                             .clientTrackingRange(20)
                             .build("stalker")
             );
+    public static final RegistryObject<EntityType<DeadHorseEntity>> DEAD_HORSE =
+            ENTITY_TYPES.register("dead_horse", ()->
+                    EntityType.Builder.of(DeadHorseEntity::new, MobCategory.CREATURE)
+                            .sized(1.4f, 1.6f)
+                            .build("dead_horse")
+            );
+
+
 }

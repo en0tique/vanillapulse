@@ -1,5 +1,6 @@
 package net.kn.horrormod.entity.ai;
 
+import net.kn.horrormod.entity.StalkerEntity;
 import net.kn.horrormod.entity.util.VisionUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,6 +18,10 @@ public class HideFromPlayerGoal extends Goal {
     private final PathfinderMob mob;
     private final double speed;
     private static final int SEARCH_RADIUS = 10;
+
+    private long lastSearchTick = -1000;
+    private static final int SEARCH_COOLDOWN = 20;
+
 
     private BlockPos hideSpot;
 
@@ -56,9 +61,16 @@ public class HideFromPlayerGoal extends Goal {
 
     @Override
     public boolean canUse() {
+        if (mob instanceof StalkerEntity stalker && stalker.isAggressionReady() && !stalker.hasStruckRecently()) {
+            return false;
+        }
+
+        if (mob.tickCount - lastSearchTick < SEARCH_COOLDOWN) {
+            return false;
+        }
+
         Player player = mob.level().getNearestPlayer(mob, 32.0);
         if (player == null) return false;
-
 
         return VisionUtils.isPlayerLookingAt(player, mob);
     }
@@ -69,8 +81,8 @@ public class HideFromPlayerGoal extends Goal {
         double bestDist = Double.MAX_VALUE;
 
         for (BlockPos obstaclePos : BlockPos.betweenClosed(
-                mobPos.offset(-SEARCH_RADIUS, -2, -SEARCH_RADIUS),
-                mobPos.offset(SEARCH_RADIUS, 2, SEARCH_RADIUS))) {
+                mobPos.offset(-SEARCH_RADIUS, -5, -SEARCH_RADIUS),
+                mobPos.offset(SEARCH_RADIUS, 5, SEARCH_RADIUS))) {
 
             if (!mob.level().getBlockState(obstaclePos)
                     .isFaceSturdy(mob.level(), obstaclePos, Direction.UP)) {
@@ -123,18 +135,15 @@ public class HideFromPlayerGoal extends Goal {
 
     @Override
     public void start() {
+        lastSearchTick = mob.tickCount;
+
         Player player = mob.level().getNearestPlayer(mob, 16.0);
         if (player == null) return;
 
         hideSpot = findHideSpot(player);
 
         if (hideSpot != null) {
-            mob.getNavigation().moveTo(
-                    hideSpot.getX() + 0.5,
-                    hideSpot.getY(),
-                    hideSpot.getZ() + 0.5,
-                    speed
-            );
+            mob.getNavigation().moveTo(hideSpot.getX() + 0.5, hideSpot.getY(), hideSpot.getZ() + 0.5, speed);
         }
     }
 
