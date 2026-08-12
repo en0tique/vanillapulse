@@ -9,6 +9,7 @@ import net.kn.horrormod.entity.client.DeadHorseRenderer;
 import net.kn.horrormod.entity.client.StalkerModel;
 import net.kn.horrormod.entity.client.StalkerRenderer;
 import net.kn.horrormod.item.ModItems;
+import net.kn.horrormod.network.HorrorNetwork;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,6 +21,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.kn.horrormod.sound.ModSounds;
 
 @Mod(HorrorMod.MOD_ID)
 public class HorrorMod
@@ -37,6 +39,8 @@ public class HorrorMod
 
         ModBlocks.BLOCKS.register(modEventBus);
 
+        ModSounds.SOUNDS.register(modEventBus);
+
         ModEntity.ENTITY_TYPES.register(modEventBus);
         modEventBus.addListener(this::registerAttributes);
 
@@ -50,7 +54,7 @@ public class HorrorMod
     }
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-
+        HorrorNetwork.register();
     }
 
 

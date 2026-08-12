@@ -1,0 +1,10 @@
+{
+  "jumpscare": {
+    "sounds": [
+      {
+        "name": "horrormod:horse_scream",
+        "stream": true
+      }
+    ]
+  }
+}
