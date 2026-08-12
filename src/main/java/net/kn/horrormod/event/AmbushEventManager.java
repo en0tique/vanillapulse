@@ -70,7 +70,7 @@ public class AmbushEventManager {
 
     private static void applyEventEffects(List<ServerPlayer> players) {
         for (ServerPlayer player : players) {
-            player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, EVENT_DURATION, 1, false, false));
+            player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 60, 0, false, false));
             player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, EVENT_DURATION, 4, false, false));
         }
     }
