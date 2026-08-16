@@ -25,6 +25,12 @@ public class ModEntity {
                             .sized(1.4f, 1.6f)
                             .build("dead_horse")
             );
-
+    public static final RegistryObject<EntityType<ScarecrowEntity>> SCARECROW =
+            ENTITY_TYPES.register("scarecrow", () ->
+                    EntityType.Builder.of(ScarecrowEntity::new, MobCategory.MONSTER)
+                            .sized(0.8f, 2.5f)
+                            .clientTrackingRange(10)
+                            .build("scarecrow")
+            );
 
 }

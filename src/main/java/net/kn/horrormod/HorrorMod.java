@@ -4,12 +4,17 @@ import com.mojang.logging.LogUtils;
 import net.kn.horrormod.block.ModBlocks;
 import net.kn.horrormod.entity.DeadHorseEntity;
 import net.kn.horrormod.entity.ModEntity;
+import net.kn.horrormod.entity.ScarecrowEntity;
 import net.kn.horrormod.entity.StalkerEntity;
 import net.kn.horrormod.entity.client.DeadHorseRenderer;
 import net.kn.horrormod.entity.client.StalkerModel;
 import net.kn.horrormod.entity.client.StalkerRenderer;
 import net.kn.horrormod.item.ModItems;
 import net.kn.horrormod.network.HorrorNetwork;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -51,6 +56,7 @@ public class HorrorMod
     private void registerAttributes(final EntityAttributeCreationEvent event) {
         event.put(ModEntity.STALKER.get(), StalkerEntity.createAttributes().build());
         event.put(ModEntity.DEAD_HORSE.get(), DeadHorseEntity.createAttributes().build() );
+        event.put(ModEntity.SCARECROW.get(), ScarecrowEntity.createAttributes().build());
     }
     private void commonSetup(final FMLCommonSetupEvent event)
     {
@@ -67,6 +73,14 @@ public class HorrorMod
         public static void onRegisterEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(ModEntity.STALKER.get(), StalkerRenderer::new);
             event.registerEntityRenderer( ModEntity.DEAD_HORSE.get(), DeadHorseRenderer::new );
+            event.registerEntityRenderer(ModEntity.SCARECROW.get(), context ->
+                    new HumanoidMobRenderer<>(context, new PlayerModel<>(context.bakeLayer(ModelLayers.PLAYER), false), 0.5f) {
+                        @Override
+                        public ResourceLocation getTextureLocation(ScarecrowEntity entity) {
+                            return new ResourceLocation("minecraft", "textures/entity/zombie/zombie.png");
+                        }
+                    }
+            );
         }
 
         @SubscribeEvent
