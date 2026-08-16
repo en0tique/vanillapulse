@@ -35,5 +35,13 @@ public class ModItems {
                     .setNoRepair()
             ));
 
+    public static final RegistryObject<Item> STRAW_HAT =
+            ITEMS.register(
+                    "straw_hat",
+                    () -> new StrawHatItem(
+                            new Item.Properties()
+                    )
+            );
+
 
 }
