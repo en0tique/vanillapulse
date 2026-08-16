@@ -18,7 +18,9 @@ import net.kn.horrormod.item.ModItems;
 import net.kn.horrormod.network.HorrorNetwork;
 import net.kn.horrormod.sound.ModSounds;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -43,32 +45,55 @@ public class HorrorMod {
 
     public static final String MOD_ID = "horrormod";
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER =
+            LogUtils.getLogger();
 
-    public HorrorMod(FMLJavaModLoadingContext context) {
+    /*
+     * ModelLayer для капелюха.
+     */
+    public static final ModelLayerLocation STRAW_HAT_LAYER =
+            new ModelLayerLocation(
+                    new ResourceLocation(
+                            MOD_ID,
+                            "straw_hat"
+                    ),
+                    "main"
+            );
 
-        IEventBus modEventBus = context.getModEventBus();
+    public HorrorMod(
+            FMLJavaModLoadingContext context
+    ) {
 
-        // Предмети
-        ModItems.ITEMS.register(modEventBus);
+        IEventBus modEventBus =
+                context.getModEventBus();
 
-        // Блоки
-        ModBlocks.BLOCKS.register(modEventBus);
+        ModItems.ITEMS.register(
+                modEventBus
+        );
 
-        // Звуки
-        ModSounds.SOUNDS.register(modEventBus);
+        ModBlocks.BLOCKS.register(
+                modEventBus
+        );
 
-        // Entity
-        ModEntity.ENTITY_TYPES.register(modEventBus);
+        ModSounds.SOUNDS.register(
+                modEventBus
+        );
 
-        // Атрибути Entity
-        modEventBus.addListener(this::registerAttributes);
+        ModEntity.ENTITY_TYPES.register(
+                modEventBus
+        );
 
-        // Common setup
-        modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(
+                this::registerAttributes
+        );
 
-        // Forge event bus
-        MinecraftForge.EVENT_BUS.register(this);
+        modEventBus.addListener(
+                this::commonSetup
+        );
+
+        MinecraftForge.EVENT_BUS.register(
+                this
+        );
     }
 
     private void registerAttributes(
@@ -77,29 +102,32 @@ public class HorrorMod {
 
         event.put(
                 ModEntity.STALKER.get(),
-                StalkerEntity.createAttributes().build()
+                StalkerEntity
+                        .createAttributes()
+                        .build()
         );
 
         event.put(
                 ModEntity.DEAD_HORSE.get(),
-                DeadHorseEntity.createAttributes().build()
+                DeadHorseEntity
+                        .createAttributes()
+                        .build()
         );
 
         event.put(
                 ModEntity.SCARECROW.get(),
-                ScarecrowEntity.createAttributes().build()
+                ScarecrowEntity
+                        .createAttributes()
+                        .build()
         );
     }
 
     private void commonSetup(
             final FMLCommonSetupEvent event
     ) {
+
         HorrorNetwork.register();
     }
-
-    // =========================================================
-    // CLIENT
-    // =========================================================
 
     @Mod.EventBusSubscriber(
             modid = MOD_ID,
@@ -108,10 +136,9 @@ public class HorrorMod {
     )
     public static class ClientModEvents {
 
-        // =====================================================
-        // ENTITY RENDERERS
-        // =====================================================
-
+        /*
+         * ENTITY RENDERERS
+         */
         @SubscribeEvent
         public static void onRegisterEntityRenderers(
                 EntityRenderersEvent.RegisterRenderers event
@@ -133,16 +160,19 @@ public class HorrorMod {
                             new HumanoidMobRenderer<>(
                                     context,
                                     new PlayerModel<>(
-                                            context.bakeLayer(ModelLayers.PLAYER),
+                                            context.bakeLayer(
+                                                    ModelLayers.PLAYER
+                                            ),
                                             false
                                     ),
-                                    0.5f
+                                    0.5F
                             ) {
 
                                 @Override
                                 public ResourceLocation getTextureLocation(
                                         ScarecrowEntity entity
                                 ) {
+
                                     return new ResourceLocation(
                                             "minecraft",
                                             "textures/entity/zombie/zombie.png"
@@ -152,44 +182,48 @@ public class HorrorMod {
             );
         }
 
-        // =====================================================
-        // MODEL LAYERS
-        // =====================================================
-
+        /*
+         * MODEL LAYERS
+         */
         @SubscribeEvent
         public static void onRegisterLayers(
                 EntityRenderersEvent.RegisterLayerDefinitions event
         ) {
 
             /*
-             * Тут реєструємо ТІЛЬКИ StalkerModel.
-             *
-             * StrawHatModel сюди НЕ додаємо.
-             *
-             * Він більше не використовує ModelLayerDefinition /
-             * ModelPart / bakeLayer().
+             * Stalker
              */
-
             event.registerLayerDefinition(
                     StalkerModel.LAYER_LOCATION,
                     StalkerModel::createBodyLayer
             );
+
+            /*
+             * Straw Hat
+             */
+            event.registerLayerDefinition(
+                    STRAW_HAT_LAYER,
+                    StrawHatModel::createBodyLayer
+            );
         }
 
-        // =====================================================
-        // PLAYER LAYERS
-        // =====================================================
-
+        /*
+         * PLAYER LAYERS
+         */
         @SubscribeEvent
         public static void onAddLayers(
                 EntityRenderersEvent.AddLayers event
         ) {
 
-            // Steve
-            addHatLayer(event, "default");
+            addHatLayer(
+                    event,
+                    "default"
+            );
 
-            // Alex
-            addHatLayer(event, "slim");
+            addHatLayer(
+                    event,
+                    "slim"
+            );
         }
 
         private static void addHatLayer(
@@ -197,7 +231,8 @@ public class HorrorMod {
                 String skin
         ) {
 
-            var renderer = event.getSkin(skin);
+            var renderer =
+                    event.getSkin(skin);
 
             if (renderer == null) {
                 return;
@@ -206,10 +241,8 @@ public class HorrorMod {
             /*
              * getSkin() має wildcard generic.
              *
-             * Тут робимо контрольований cast до renderer
-             * гравця.
+             * Контрольований cast.
              */
-
             @SuppressWarnings("unchecked")
             LivingEntityRenderer<
                     Player,
@@ -221,16 +254,21 @@ public class HorrorMod {
                             >) (Object) renderer;
 
             /*
-             * Наша StrawHatModel більше НЕ використовує
-             * ModelPart.
-             *
-             * Тому ніякого bakeLayer() тут немає.
+             * Створюємо StrawHatModel
+             * із ModelLayer.
              */
-            StrawHatModel<Player> hatModel =
-                    new StrawHatModel<>();
+            StrawHatModel hatModel =
+                    new StrawHatModel(
+                            Minecraft
+                                    .getInstance()
+                                    .getEntityModels()
+                                    .bakeLayer(
+                                            STRAW_HAT_LAYER
+                                    )
+                    );
 
             /*
-             * Додаємо капелюх до renderer гравця.
+             * Додаємо капелюх.
              */
             playerRenderer.addLayer(
                     new StrawHatLayer(
@@ -240,15 +278,13 @@ public class HorrorMod {
             );
         }
 
-        // =====================================================
-        // CLIENT SETUP
-        // =====================================================
-
+        /*
+         * CLIENT SETUP
+         */
         @SubscribeEvent
         public static void onClientSetup(
                 FMLClientSetupEvent event
         ) {
-
         }
     }
 }

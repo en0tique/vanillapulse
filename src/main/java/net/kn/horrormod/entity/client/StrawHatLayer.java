@@ -1,7 +1,10 @@
 package net.kn.horrormod.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.kn.horrormod.item.StrawHatItem;
+
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -13,20 +16,19 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-public class StrawHatLayer
-        extends RenderLayer<Player, PlayerModel<Player>> {
+public class StrawHatLayer extends RenderLayer<Player, PlayerModel<Player>> {
 
-    private static final ResourceLocation TEXTURE =
+    private static final ResourceLocation HAT_TEXTURE =
             new ResourceLocation(
                     "horrormod",
                     "textures/entity/straw_hat.png"
             );
 
-    private final StrawHatModel<Player> hatModel;
+    private final StrawHatModel hatModel;
 
     public StrawHatLayer(
             RenderLayerParent<Player, PlayerModel<Player>> parent,
-            StrawHatModel<Player> hatModel
+            StrawHatModel hatModel
     ) {
         super(parent);
         this.hatModel = hatModel;
@@ -46,32 +48,36 @@ public class StrawHatLayer
             float headPitch
     ) {
 
-        ItemStack stack =
-                player.getItemBySlot(EquipmentSlot.HEAD);
+        ItemStack stack = player.getItemBySlot(EquipmentSlot.HEAD);
 
-        if (!(stack.getItem() instanceof StrawHatItem)) {
+        if (stack.isEmpty()
+                || !(stack.getItem() instanceof StrawHatItem)) {
             return;
         }
-
         poseStack.pushPose();
 
-        /*
-         * Прикріплюємо весь капелюх до голови гравця.
-         */
         this.getParentModel().head.translateAndRotate(poseStack);
 
-        /*
-         * Player head має стандартну Minecraft-модель,
-         * а наша модель побудована в координатах Blockbench
-         * навколо [8,8,8].
-         *
-         * Перший тест — без додаткового зміщення.
-         */
+        poseStack.translate(0.0F, -0.25F, 0.0F);
+        poseStack.scale(1.2F, 1.2F, 1.2F);
+
+        hatModel.setupAnim(
+                player,
+                limbSwing,
+                limbSwingAmount,
+                ageInTicks,
+                netHeadYaw,
+                headPitch
+        );
+
+        VertexConsumer vertexConsumer =
+                buffer.getBuffer(
+                        RenderType.entityCutoutNoCull(HAT_TEXTURE)
+                );
+
         hatModel.renderToBuffer(
                 poseStack,
-                buffer.getBuffer(
-                        RenderType.entityCutoutNoCull(TEXTURE)
-                ),
+                vertexConsumer,
                 packedLight,
                 OverlayTexture.NO_OVERLAY,
                 1.0F,
