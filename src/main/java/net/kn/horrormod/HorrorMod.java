@@ -8,11 +8,7 @@ import net.kn.horrormod.entity.ModEntity;
 import net.kn.horrormod.entity.ScarecrowEntity;
 import net.kn.horrormod.entity.StalkerEntity;
 
-import net.kn.horrormod.entity.client.DeadHorseRenderer;
-import net.kn.horrormod.entity.client.StalkerModel;
-import net.kn.horrormod.entity.client.StalkerRenderer;
-import net.kn.horrormod.entity.client.StrawHatLayer;
-import net.kn.horrormod.entity.client.StrawHatModel;
+import net.kn.horrormod.entity.client.*;
 
 import net.kn.horrormod.item.ModItems;
 import net.kn.horrormod.network.HorrorNetwork;
@@ -154,32 +150,7 @@ public class HorrorMod {
                     DeadHorseRenderer::new
             );
 
-            event.registerEntityRenderer(
-                    ModEntity.SCARECROW.get(),
-                    context ->
-                            new HumanoidMobRenderer<>(
-                                    context,
-                                    new PlayerModel<>(
-                                            context.bakeLayer(
-                                                    ModelLayers.PLAYER
-                                            ),
-                                            false
-                                    ),
-                                    0.5F
-                            ) {
-
-                                @Override
-                                public ResourceLocation getTextureLocation(
-                                        ScarecrowEntity entity
-                                ) {
-
-                                    return new ResourceLocation(
-                                            "minecraft",
-                                            "textures/entity/zombie/zombie.png"
-                                    );
-                                }
-                            }
-            );
+            event.registerEntityRenderer(ModEntity.SCARECROW.get(), ScarecrowRenderer::new);
         }
 
         /*
@@ -197,7 +168,7 @@ public class HorrorMod {
                     StalkerModel.LAYER_LOCATION,
                     StalkerModel::createBodyLayer
             );
-
+            event.registerLayerDefinition(ScarecrowModel.LAYER_LOCATION, ScarecrowModel::createBodyLayer);
             /*
              * Straw Hat
              */

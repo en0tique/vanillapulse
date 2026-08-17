@@ -4,6 +4,7 @@ import net.kn.horrormod.entity.util.VisionUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.TickTask;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -19,6 +20,9 @@ public class ScarecrowEntity extends Monster {
     private int teleportCooldown = 0;
     private float fixedYaw = 0;
     private boolean directionInitialized = false;
+    public final AnimationState idleAnimationState = new AnimationState();
+    public final AnimationState watchTriggerAnimationState = new AnimationState();
+    private boolean wasWatching = false;
 
     public ScarecrowEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -63,6 +67,7 @@ public class ScarecrowEntity extends Monster {
         super.tick();
 
         if (level().isClientSide()) {
+            idleAnimationState.startIfStopped(this.tickCount);
             return;
         }
 
@@ -75,6 +80,11 @@ public class ScarecrowEntity extends Monster {
 
         long days = level().getDayTime() / 24000L;
         boolean isWatching = days >= 10;
+
+        if (isWatching && !wasWatching) {
+            watchTriggerAnimationState.start(this.tickCount);
+        }
+        wasWatching = isWatching;
 
         if (!isWatching) {
             handleDormantPhase();
