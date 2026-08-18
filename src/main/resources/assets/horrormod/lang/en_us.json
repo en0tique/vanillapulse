@@ -2,5 +2,9 @@
   "comment": "Як будуть зчитуватися назви",
   "item.horrormod.steel_ingot": "Steel ingot",
   "item.horrormod.shit_ingot": "Shit ingot",
-  "item.horrormod.celt_crest": "Celtic Crest"
+  "item.horrormod.celt_crest": "Celtic Crest",
+  "item.horrormod.straw_hat": "Straw Hat",
+  "entity.horrormod.dead_horse": "Dead Horse",
+  "entity.horrormod.stalker": "Stalker",
+  "entity.horrormod.scarecrow": "Scarecrow"
 }

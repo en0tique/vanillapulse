@@ -10,6 +10,10 @@ import net.kn.horrormod.entity.StalkerEntity;
 
 import net.kn.horrormod.entity.client.*;
 
+import net.kn.horrormod.entity.client.StrawHatArmorStandLayer;
+import net.minecraft.client.renderer.entity.ArmorStandRenderer;
+import net.minecraft.world.entity.EntityType;
+
 import net.kn.horrormod.item.ModItems;
 import net.kn.horrormod.network.HorrorNetwork;
 import net.kn.horrormod.sound.ModSounds;
@@ -194,6 +198,53 @@ public class HorrorMod {
             addHatLayer(
                     event,
                     "slim"
+            );
+            addArmorStandHatLayer(event);
+        }
+
+        private static void addArmorStandHatLayer(
+                EntityRenderersEvent.AddLayers event
+        ) {
+
+            var renderer =
+                    event.getRenderer(EntityType.ARMOR_STAND);
+
+            if (renderer == null) {
+                return;
+            }
+
+            /*
+             * ArmorStandRenderer у Forge 1.20.1 має
+             * конкретний generic тип моделі.
+             *
+             * Тут робимо такий самий контрольований cast,
+             * як вище для Player.
+             */
+            @SuppressWarnings("unchecked")
+            LivingEntityRenderer<
+                    net.minecraft.world.entity.decoration.ArmorStand,
+                    net.minecraft.client.model.ArmorStandModel
+                    > armorStandRenderer =
+                    (LivingEntityRenderer<
+                            net.minecraft.world.entity.decoration.ArmorStand,
+                            net.minecraft.client.model.ArmorStandModel
+                            >) (Object) renderer;
+
+            StrawHatModel hatModel =
+                    new StrawHatModel(
+                            Minecraft
+                                    .getInstance()
+                                    .getEntityModels()
+                                    .bakeLayer(
+                                            STRAW_HAT_LAYER
+                                    )
+                    );
+
+            armorStandRenderer.addLayer(
+                    new StrawHatArmorStandLayer(
+                            armorStandRenderer,
+                            hatModel
+                    )
             );
         }
 
