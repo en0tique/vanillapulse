@@ -27,7 +27,7 @@ public class FarmHorrorManager {
     private static final Random RANDOM = new Random();
     private static final ResourceLocation FARM_STRUCTURE = new ResourceLocation(HorrorMod.MOD_ID, "farm_house");
     private static final int CHECK_INTERVAL = 200;
-    private static final int GHOST_LIFETIME = 12000;
+    private static final int GHOST_LIFETIME = 1200;
     private static final int SEARCH_RADIUS = 80;
 
     private static int tickCounter = 0;

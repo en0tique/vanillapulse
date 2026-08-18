@@ -41,7 +41,7 @@ public class HorrorMod {
 
     public static final String MOD_ID = "horrormod";
 
-    private static final Logger LOGGER =
+    public static final Logger LOGGER =
             LogUtils.getLogger();
 
     /*
