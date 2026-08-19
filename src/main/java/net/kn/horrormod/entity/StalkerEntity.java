@@ -37,13 +37,14 @@ public class StalkerEntity  extends Monster {
     }
 
     @Override
-    public  boolean doHurtTarget(Entity target){
+
+    public boolean doHurtTarget(Entity target){
         boolean result = super.doHurtTarget(target);
         if(result){
             hasStruck = true;
             this.setTarget(null);
         }
-        return hasStruck;
+        return result;
     }
     public boolean hasStruckRecently(){
         return hasStruck;

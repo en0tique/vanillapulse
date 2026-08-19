@@ -93,6 +93,8 @@ public class FarmHorrorManager {
         ChunkPos chunkPos = new ChunkPos(center);
         level.getChunk(chunkPos.x, chunkPos.z);
 
+
+
         BlockPos surface = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, center).below(4);
 
         StructureTemplateManager manager = level.getStructureManager();

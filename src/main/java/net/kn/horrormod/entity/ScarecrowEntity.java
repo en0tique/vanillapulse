@@ -167,14 +167,15 @@ public class ScarecrowEntity extends Monster {
         BlockPos newSpot = findNearestFarmland(this.blockPosition(), 20);
         if (newSpot == null) return;
 
+        Level level = this.level();
         this.remove(RemovalReason.DISCARDED);
 
-        level().getServer().tell(new TickTask(40, () -> {
-            ScarecrowEntity newScarecrow = net.kn.horrormod.entity.ModEntity.SCARECROW.get().create(level());
+        level.getServer().tell(new TickTask(40, () -> {
+            ScarecrowEntity newScarecrow = net.kn.horrormod.entity.ModEntity.SCARECROW.get().create(level);
             if (newScarecrow == null) return;
 
             newScarecrow.moveTo(newSpot.getX() + 0.5, newSpot.getY() + 1, newSpot.getZ() + 0.5, 0, 0);
-            level().addFreshEntity(newScarecrow);
+            level.addFreshEntity(newScarecrow);
         }));
     }
 }
