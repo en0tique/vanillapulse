@@ -54,14 +54,13 @@ public class GuaranteedFarmManager {
 
         if (data.placed) return;
 
-        // затримка 100 тіків (5 секунд) - дає час на генерацію/довантаження чанків спавну
         level.getServer().tell(new TickTask(100, () -> {
             boolean success = placeGuaranteedFarm(level);
             if (success) {
                 data.placed = true;
                 data.setDirty();
             } else {
-                HorrorMod.LOGGER.warn("[HorrorMod] Не вдалось розмістити гарантовану ферму - шаблон не знайдено чи інша помилка");
+                HorrorMod.LOGGER.warn("[HorrorMod] Не вдалось розмістити гарантовану ферму");
             }
         }));
     }
@@ -77,16 +76,15 @@ public class GuaranteedFarmManager {
 
             BlockPos candidate = spawn.offset(dx, 0, dz);
 
-            // примусово довантажити/згенерувати чанк ПЕРЕД вимірюванням висоти
             ChunkPos chunkPos = new ChunkPos(candidate);
             level.getChunk(chunkPos.x, chunkPos.z);
 
-            BlockPos surface = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, candidate);
+            BlockPos surface = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, candidate).below(4);
 
             StructureTemplateManager manager = level.getStructureManager();
             StructureTemplate template = manager.get(FARM_STRUCTURE).orElse(null);
             if (template == null) {
-                HorrorMod.LOGGER.warn("[HorrorMod] Шаблон 'farm_house' не знайдено в StructureTemplateManager");
+                HorrorMod.LOGGER.warn("[HorrorMod] Шаблон 'farm_house' не знайдено");
                 return false;
             }
 
