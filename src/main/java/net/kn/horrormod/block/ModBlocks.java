@@ -22,6 +22,8 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> STEEL_BLOCK = registryBlock("steel_block",
             ()-> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+    public static final RegistryObject<Block> ANOMALOUS_CROP = BLOCKS.register("anomalous_crop",
+            () -> new AnomalousCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
 
 
 

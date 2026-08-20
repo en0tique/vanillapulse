@@ -42,6 +42,8 @@ public class ModItems {
                             new Item.Properties()
                     )
             );
+    public static final RegistryObject<Item> UNKNOWN_SEED = ITEMS.register("unknown_seed",
+            () -> new UnknownSeedItem(new Item.Properties()));
 
 
 }

@@ -20,10 +20,10 @@ import java.util.Random;
 public class AnimalCountAnomalyManager {
 
     private static final Random RANDOM = new Random();
-    private static final int CHECK_INTERVAL = 20;
+    private static final int CHECK_INTERVAL = 120;
     private static final double SEARCH_RADIUS = 24.0;
-    private static final double BASE_CHANCE = 0.50;
-    private static final int MIN_ANIMALS = 0;
+    private static final double BASE_CHANCE = 0.20;
+    private static final int MIN_ANIMALS = 1;
     private static final int MAX_ANIMALS = 50;
     private static int tickCounter = 0;
 

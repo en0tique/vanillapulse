@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "horrormod:block/anomalous_crop_stage1"
+  }
+}

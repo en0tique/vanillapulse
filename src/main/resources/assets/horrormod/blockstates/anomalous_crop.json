@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "age=0": { "model": "horrormod:block/anomalous_crop_stage0" },
+    "age=1": { "model": "horrormod:block/anomalous_crop_stage1" },
+    "age=2": { "model": "horrormod:block/anomalous_crop_stage2" }
+  }
+}
